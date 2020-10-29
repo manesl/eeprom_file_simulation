@@ -14,8 +14,8 @@ void read_page(char *page, int page_no);
 void write_page(char *page, int page_no, int word_no, int no_of_word);
 
 //basic file I/O
-void open_file(FILE *fptr);
-void close_file(FILE *fptr);
+void open_file(void);
+void close_file(void);
 
 int main(){
 
@@ -61,7 +61,7 @@ int main(){
 	return 0;
 }
 
-void open_file(FILE *fptr){
+void open_file(){
 	fptr = fopen("./original.txt", "r+");
 
 	if(fptr==NULL){
@@ -70,18 +70,18 @@ void open_file(FILE *fptr){
 	}
 }
 
-void close_file(FILE *fptr){
+void close_file(){
 	fclose(fptr);
 }
 
 void read_page(char* page, int page_no){
 	int i=0;
-	open_file(fptr);
+	open_file();
 	fseek(fptr, (page_no*32), SEEK_SET);
 	for(i=0;i<32;i++){
 		page[i]=fgetc(fptr);
 	}
-	close_file(fptr);
+	close_file();
 	return;
 }
 
@@ -145,7 +145,7 @@ void eeprom_write(long int offset, int size, char* buf){
 
 void write_page(char *page, int page_no, int word_no, int no_of_word){
 	
-	open_file(fptr);
+	open_file();
 	fseek(fptr, ((page_no*32)+word_no), SEEK_SET); //set fptr to start of page 
 	
 	while(word_no<32 && no_of_word!=0){
@@ -155,7 +155,7 @@ void write_page(char *page, int page_no, int word_no, int no_of_word){
 		word_no++;
 	}
 
-	close_file(fptr);
+	close_file();
 	return;
 	
 }
