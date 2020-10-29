@@ -33,7 +33,7 @@
  * @param size No of bytes
  * @param buf pointer to the heap memory where the bytes accessed will be returned.
  *
- * @return void.
+ * @return void
  */
 void eeprom_read(long int offset, int size, char* buf);
 

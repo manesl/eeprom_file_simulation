@@ -20,38 +20,49 @@ void close_file(void){
 
 void read_page(char* page, int page_no){
 	int i=0;
-	open_file();
-	fseek(fptr, (page_no*32), SEEK_SET);
-	for(i=0;i<32;i++){
-		page[i]=fgetc(fptr);
+	if(page_no>255){
+		printf("read_page error:page_no input is invalid\n");
 	}
-	close_file();
+	else{
+		open_file();
+		fseek(fptr, (page_no*32), SEEK_SET);
+		for(i=0;i<32;i++){
+			page[i]=fgetc(fptr);
+		}
+		close_file();
+	}
 	return;
 }
 
 void eeprom_read(long int offset, int size, char* buf){
-	int page_no;
-	int word_no;
+	int page_no=0;
+	int word_no=0;
 	int index=0; //this is bufout index which can go from 0-8191
-	
-	while(size!=0){
-			page_no=offset/32; 
-			word_no=offset%32; 
-			
-			char* page=(char *) malloc(32*sizeof(char));
-			read_page(page, page_no);
-			
-			while(word_no!=32 && size!=0){
-				buf[index]=page[word_no];
-				size--;
-				index++;
-				word_no++;
-			}
-			offset=offset+index;
-			
-			free(page);
-			page=NULL;
+	if(offset>8192|| size>8192){
+		printf("eeprom_read error:offset or size input is invalid\n");
 	}
+	else{
+		while(size!=0){
+				page_no=offset/32; 
+				word_no=offset%32; 
+				
+				char* page=(char *) malloc(32*sizeof(char));
+				read_page(page, page_no);
+
+				while(word_no!=32 && size!=0){
+					buf[index]=page[word_no];
+
+					size--;
+					index++;
+					word_no++;
+				}
+				page_no++;
+				offset=page_no*32;
+				free(page);
+				page=NULL;
+		}
+	}
+	
 	return;
 }
 
@@ -62,44 +73,51 @@ void eeprom_write(long int offset, int size, char* buf){
 	
 	int overwrite_word_no;
 	int no_of_word=0;
-	
-	while(size!=0){ //5
-		page_no=offset/32; 
-		word_no=offset%32; 
-		overwrite_word_no=offset%32; 
-		no_of_word=0;
-		char* page=(char *) calloc(32,sizeof(char)); //created a malloc page
-		//fill page values
-		while(word_no!=32 && size!=0){
-			page[word_no]=buf[i]; //buf = bufin is like data
-			word_no++;
-			size--;
-			i++;
-			no_of_word++;
-		}
-		
-		write_page(page, page_no, overwrite_word_no, no_of_word); 
-		offset=offset+no_of_word; 
-		free(page);
-		page=NULL;
+	if(offset>8192 || size>8192){
+		printf("eeprom_write error: offset or size input is invalid\n");
 	}
-	
+	else{
+		while(size!=0){ 
+			page_no=offset/32; 
+			word_no=offset%32; 
+			overwrite_word_no=offset%32; 
+			no_of_word=0;
+			char* page=(char *) calloc(32,sizeof(char)); //created a malloc page
+			//fill page values
+			while(word_no!=32 && size!=0){
+				page[word_no]=buf[i]; //buf = bufin is like data
+				word_no++;
+				size--;
+				i++;
+				no_of_word++;
+			}
+			
+			write_page(page, page_no, overwrite_word_no, no_of_word); 
+			offset=offset+no_of_word;
+			free(page);
+			page=NULL;
+		}
+	}
 	return;
 }
 
 void write_page(char *page, int page_no, int word_no, int no_of_word){
-	
-	open_file();
-	fseek(fptr, ((page_no*32)+word_no), SEEK_SET); //set fptr to start of page 
-	
-	while(word_no<32 && no_of_word!=0){
-		
-		fputc(page[word_no], fptr);
-		no_of_word--;
-		word_no++;
+	if(page_no>255 || word_no>32 || no_of_word>32){
+		printf("write_page error: page_no or word_no or no_of_word input is invalid\n");
 	}
+	else{
+		open_file();
+		fseek(fptr, ((page_no*32)+word_no), SEEK_SET); //set fptr to start of page 
+		
+		while(word_no<32 && no_of_word!=0){
+			
+			fputc(page[word_no], fptr);
+			no_of_word--;
+			word_no++;
+		}
 
-	close_file();
+		close_file();
+	}
 	return;
 	
 }

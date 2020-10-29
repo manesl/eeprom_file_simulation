@@ -10,6 +10,15 @@ int main(){
 //for writing content	
 	char *bufin = (char *) calloc(8192,sizeof(char));
 
+
+/*
+//to test bad inputs
+	write_page(bufin, 256, 32, 33);
+	read_page(bufout, 256);
+	eeprom_write(8192, 8193, bufin);
+	eeprom_read(8192, 8193, bufout);
+*/
+/*
 //checking the erase function
 	erase();
 	eeprom_read(0, 8192, bufout);
@@ -17,7 +26,7 @@ int main(){
 	for(b=0;b<8192;b++){
 		printf("%c", bufout[b]); //final output
 	}
-
+*/
 //temporary write sample	
 	int i=0;
 	int j=66;
@@ -29,9 +38,10 @@ int main(){
 	eeprom_write(0, 8192, bufin);
 	
 //get last 3 bytes from 8189 offset
-	eeprom_read(25, 15, bufout); //getting the heap address
+	eeprom_read(0, 8192, bufout); //getting the heap address
 	
-	for(b=0;b<50;b++){
+	int b;
+	for(b=0;b<8192;b++){
 		printf("%c", bufout[b]); //final output
 	}
 //double check by putting the output in another text file or eeprom	
