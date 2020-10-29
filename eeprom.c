@@ -1,67 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "./eeprom.h"
 //global variables
 FILE *fptr;
-//char page[32];
+#define ERASE 0xFF
 
-//function prototypes
-void eeprom_read(long int offset, int size, char* buf);
-void eeprom_write(long int offset, int size, char* buf);
-
-//low-leve-page access function
-void read_page(char *page, int page_no);
-void write_page(char *page, int page_no, int word_no, int no_of_word);
-
-//basic file I/O
-void open_file(void);
-void close_file(void);
-
-int main(){
-
-//for reading content
-	char *bufout = (char *) calloc(8192,sizeof(char));
-	
-//for writing content	
-	char *bufin = (char *) calloc(8192,sizeof(char));
-	
-//temporary write sample	
-	int i=0;
-	int j=66;
-	for(i=0;i<8192;i++){
-		bufin[i]=j;
-	}
-
-//eeprom write based on offset 0 and size all 8193 [0-8192] words/bytes
-	eeprom_write(30, 10, bufin);
-	
-//get last 3 bytes from 8189 offset
-	eeprom_read(25, 15, bufout); //getting the heap address
-	
-	int b=0;
-	for(b=0;b<50;b++){
-		printf("%c", bufout[b]); //final output
-	}
-	
-	FILE *fp;
-	fp = fopen("./check_output.txt", "w+");
-	if(fp==NULL){
-		printf("error");
-	}
-	for(i=0;i<8192;i++){
-		fputc(bufout[i], fp);
-	}
-	
-	fclose(fp);
-//free maloc
-	free(bufout);
-	free(bufin);
-	bufout=NULL;
-	bufin=NULL;
-	return 0;
-}
-
-void open_file(){
+void open_file(void){
 	fptr = fopen("./original.txt", "r+");
 
 	if(fptr==NULL){
@@ -70,7 +14,7 @@ void open_file(){
 	}
 }
 
-void close_file(){
+void close_file(void){
 	fclose(fptr);
 }
 
@@ -158,4 +102,21 @@ void write_page(char *page, int page_no, int word_no, int no_of_word){
 	close_file();
 	return;
 	
+}
+
+void erase(void){
+	int status=ERASE;
+//for writing content	
+	char *bufin = (char *) calloc(8192,sizeof(char));
+//temporary write sample	
+	int i=0;
+	for(i=0;i<8192;i++){
+		bufin[i]=32;
+	}
+	if(status==ERASE){
+		eeprom_write(0, 8192, bufin);	
+	}
+	free(bufin);
+	bufin=NULL;
+	return;
 }

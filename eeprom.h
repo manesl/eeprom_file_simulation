@@ -81,21 +81,45 @@ void read_page(char *page, int page_no);
  *
  * @return void.
  */
-void write_page(char *page, int page_no, int word_no, int no_of_word)
+void write_page(char *page, int page_no, int word_no, int no_of_word);
 
 /**
- * @brief Reads a page from the file
+ * @brief Opens the file 
  *
- * Given a page number, sets the file pointer to the page starting address, 
- * and then copies the bytes in the file to the location pointed by page. 
+ * Opens a file, in order create a new text file change the path in this function definition
  * 
  *
- * @param page Pointer to the location where the 32 bytes/ single page will be copied
- * @param page_no Page number
+ * @param void
  * 
  *
  * @return void.
  */
+void open_file(void);
 
+/**
+ * @brief Closes the file 
+ *
+ * Closes a file
+ * 
+ *
+ * @param void
+ * 
+ *
+ * @return void.
+ */
+void close_file(void);
+
+/**
+ * @brief Erase the file
+ *
+ * Erases all the location of file
+ * 
+ *
+ * @param void
+ * 
+ *
+ * @return void.
+ */
+void erase(void);
 
 #endif /* __MEMORY_H__ */
