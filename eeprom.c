@@ -4,6 +4,8 @@
 //global variables
 FILE *fptr;
 #define ERASE 0xFF
+int mutex=0;
+char path[]="./original.txt";
 
 void open_file(void){
 	fptr = fopen("./original.txt", "r+");
@@ -16,10 +18,18 @@ void close_file(void){
 	fclose(fptr);
 }
 
+void get_mutex(void){
+	while(mutex); //if 1 wait until it becomes available
+	mutex=1;
+}
+void release_mutex(void){
+	mutex=0;
+}
+
 void read_page(char* page, int page_no){
 	int i=0;
 	if(page_no>255){
-		printf("read_page error:page_no input is invalid\n");
+		printf("read_page error:page_no input is invalid allowed page no are 0-255\n");
 	}
 	else{
 		open_file();
@@ -36,8 +46,8 @@ void eeprom_read(long int offset, int size, char* buf){
 	int page_no=0;
 	int word_no=0;
 	int index=0; //this is bufout index which can go from 0-8191
-	if(offset>8192 || size>8192){
-		printf("eeprom_read error:offset or size input is invalid\n");
+	if(offset>=8192 || size>8192 || size==0){
+		printf("eeprom_read error:offset or size input is invalid, allowed offset is 0-8191 and size of the bytes one can read is 1-8192\n");
 	}
 	else{
 		while(size!=0){
@@ -72,8 +82,8 @@ void eeprom_write(long int offset, int size, char* buf){
 	
 	int overwrite_word_no;//for safe over writing
 	int no_of_word=0;
-	if(offset>8192 || size>8192){
-		printf("eeprom_write error: offset or size input is invalid\n");
+	if(offset>=8192 || size>8192 || size==0){
+		printf("eeprom_write error: offset or size input is invalid, allowed offset is 0-8191 and allowed size is 1-8192\n");
 	}
 	else{
 		while(size!=0){ 
@@ -103,7 +113,7 @@ void eeprom_write(long int offset, int size, char* buf){
 
 void write_page(char *page, int page_no, int word_no, int no_of_word){
 	if(page_no>255 || word_no>32 || no_of_word>32){
-		printf("write_page error: page_no or word_no or no_of_word input is invalid\n");
+		printf("write_page error: page_no or word_no or no_of_word input is invalid, allowed page no are 0-255\n");
 	}
 	else{
 		open_file();

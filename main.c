@@ -4,7 +4,7 @@
 #include <pthread.h>
 
 //global variable
-pthread_mutex_t mutex;
+//pthread_mutex_t mutex;
  
 //function prototypes or declarations for users
 void *user1(void *param); //erase operation and writes A
@@ -13,7 +13,7 @@ void *user3(void *param); //bad inputs
 
 int main(){
 //initializing the mutex
- 	pthread_mutex_init(&mutex, NULL); 
+ 	//pthread_mutex_init(&mutex, NULL); 
 //thread creation
 	pthread_t tid1, tid2, tid3;
 	pthread_attr_t attr1, attr2, attr3;
@@ -44,7 +44,8 @@ void *user1(void *param){
 		bufin[i]=65;
 	}
 //waiting or picking the mutex to perform read write
-	pthread_mutex_lock(&mutex);
+	//pthread_mutex_lock(&mutex);
+	get_mutex();
 	printf("user 1 is accessing the file EEPROM\n");
 	printf("user 1 performs erase operation on the EEPROM\n");
 	
@@ -67,7 +68,8 @@ void *user1(void *param){
 		printf("%c", bufout[i]); //final output
 	}
 	printf("\n");
-	pthread_mutex_unlock(&mutex);
+	//pthread_mutex_unlock(&mutex);
+	release_mutex();
 	free(bufin);
 	bufin=NULL;
 	free(bufout);
@@ -82,7 +84,8 @@ void *user2(void *param){
 	for(i=0;i<8192;i++){
 		bufin[i]=66;
 	}
-	pthread_mutex_lock(&mutex);
+	//pthread_mutex_lock(&mutex);
+	get_mutex();
 	printf("user 2 is accessing the file EEPROM\n");	
 	eeprom_write(0, 8192, bufin);	
 	eeprom_read(0, 8192, bufout);
@@ -92,7 +95,8 @@ void *user2(void *param){
 		printf("%c", bufout[i]); //final output
 	}
 	printf("\n");
-	pthread_mutex_unlock(&mutex);		
+	//pthread_mutex_unlock(&mutex);		
+	release_mutex();
 	free(bufin);
 	bufin=NULL;
 	free(bufout);
@@ -106,7 +110,8 @@ void *user3(void *param){
 	for(i=0;i<8192;i++){
 		bufin[i]=66;
 	}
-	pthread_mutex_lock(&mutex);
+	//pthread_mutex_lock(&mutex);
+	get_mutex();
 	printf("user 3 is accessing the file EEPROM\n");
 //to test bad inputs
 	write_page(bufin, 256, 32, 33);
@@ -114,7 +119,8 @@ void *user3(void *param){
 	eeprom_write(8192, 8193, bufin);
 	eeprom_read(8192, 8193, bufout);
 	printf("\n");
-	pthread_mutex_unlock(&mutex);
+	release_mutex();
+	//pthread_mutex_unlock(&mutex);
 	free(bufin);
 	bufin=NULL;
 	free(bufout);

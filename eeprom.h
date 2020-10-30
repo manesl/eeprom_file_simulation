@@ -122,4 +122,30 @@ void close_file(void);
  */
 void erase(void);
 
+/**
+ * @brief Allows a user to get mutex 
+ *
+ * Enables a user to get mutex in order to perform read write operation or wait for a mutex until it becomes available
+ * 
+ *
+ * @param void
+ * 
+ *
+ * @return void.
+ */
+void get_mutex(void);
+
+/**
+ * @brief Allows a user to release mutex
+ *
+ * Enables a user to release mutex after use so that other user can get the mutex
+ * 
+ *
+ * @param void
+ * 
+ *
+ * @return void.
+ */
+void release_mutex(void);
+
 #endif /* __MEMORY_H__ */
