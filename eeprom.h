@@ -21,7 +21,9 @@
 #ifndef __EEPROM_H__
 #define __EEPROM_H__
 
-
+#include <stdio.h>
+//global variable
+FILE *fptr;
 /**
  * @brief Reads the no of bytes/words starting from the offset 
  *
@@ -94,7 +96,7 @@ void write_page(char *page, int page_no, int word_no, int no_of_word);
  *
  * @return void.
  */
-void open_file(void);
+void open_file(char path[]);
 
 /**
  * @brief Closes the file 

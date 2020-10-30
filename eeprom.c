@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include "./eeprom.h"
 //global variables
-FILE *fptr;
+//FILE *fptr;
 #define ERASE 0xFF
 int mutex=0;
 char path[]="./original.txt";
 
-void open_file(void){
-	fptr = fopen("./original.txt", "r+");
+void open_file(char path[]){
+	fptr = fopen(path, "r+");
 	if(fptr==NULL){
 		puts("error while opening the file");
 	}
@@ -32,7 +32,7 @@ void read_page(char* page, int page_no){
 		printf("read_page error:page_no input is invalid allowed page no are 0-255\n");
 	}
 	else{
-		open_file();
+		open_file(path);
 		fseek(fptr, (page_no*32), SEEK_SET);
 		for(i=0;i<32;i++){
 			page[i]=fgetc(fptr);
@@ -116,7 +116,7 @@ void write_page(char *page, int page_no, int word_no, int no_of_word){
 		printf("write_page error: page_no or word_no or no_of_word input is invalid, allowed page no are 0-255\n");
 	}
 	else{
-		open_file();
+		open_file(path);
 		fseek(fptr, ((page_no*32)+word_no), SEEK_SET); //set fptr to start of page 
 		
 		while(word_no<32 && no_of_word!=0){

@@ -3,17 +3,12 @@
 #include "eeprom.h"
 #include <pthread.h>
 
-//global variable
-//pthread_mutex_t mutex;
- 
 //function prototypes or declarations for users
 void *user1(void *param); //erase operation and writes A
 void *user2(void *param); //overwrite B
 void *user3(void *param); //bad inputs
 
-int main(){
-//initializing the mutex
- 	//pthread_mutex_init(&mutex, NULL); 
+int main(){ 
 //thread creation
 	pthread_t tid1, tid2, tid3;
 	pthread_attr_t attr1, attr2, attr3;
@@ -44,7 +39,6 @@ void *user1(void *param){
 		bufin[i]=65;
 	}
 //waiting or picking the mutex to perform read write
-	//pthread_mutex_lock(&mutex);
 	get_mutex();
 	printf("user 1 is accessing the file EEPROM\n");
 	printf("user 1 performs erase operation on the EEPROM\n");
@@ -60,15 +54,18 @@ void *user1(void *param){
 	eeprom_write(0, 8192, bufin);
 //read all bytes from out buffer 
 	eeprom_read(0, 8192, bufout); 
-//returning the mutex so that other threads can use
-	//pthread_mutex_unlock(&mutex);
 //printing the output if user 1 written operation	
 	printf("output of user 1 for write operation\n");
 	for(i=0;i<8192;i++){
 		printf("%c", bufout[i]); //final output
 	}
+//to save the intermediate output
+	open_file("user1.txt");
+	for(i=0;i<8192;i++){
+		fputc(bufout[i], fptr); //final output
+	}
+	close_file();
 	printf("\n");
-	//pthread_mutex_unlock(&mutex);
 	release_mutex();
 	free(bufin);
 	bufin=NULL;
@@ -84,18 +81,21 @@ void *user2(void *param){
 	for(i=0;i<8192;i++){
 		bufin[i]=66;
 	}
-	//pthread_mutex_lock(&mutex);
 	get_mutex();
 	printf("user 2 is accessing the file EEPROM\n");	
 	eeprom_write(0, 8192, bufin);	
 	eeprom_read(0, 8192, bufout);
-	//pthread_mutex_unlock(&mutex);
 	printf("output of user 2 for write operation\n"); 
 	for(i=0;i<8192;i++){
 		printf("%c", bufout[i]); //final output
 	}
 	printf("\n");
-	//pthread_mutex_unlock(&mutex);		
+//to save the intermediate output
+	open_file("user2.txt");
+	for(i=0;i<8192;i++){
+		fputc(bufout[i], fptr); //final output
+	}
+	close_file();		
 	release_mutex();
 	free(bufin);
 	bufin=NULL;
@@ -110,17 +110,19 @@ void *user3(void *param){
 	for(i=0;i<8192;i++){
 		bufin[i]=66;
 	}
-	//pthread_mutex_lock(&mutex);
 	get_mutex();
 	printf("user 3 is accessing the file EEPROM\n");
 //to test bad inputs
 	write_page(bufin, 256, 32, 33);
 	read_page(bufout, 256);
-	eeprom_write(8192, 8193, bufin);
-	eeprom_read(8192, 8193, bufout);
+	eeprom_write(8192, 0, bufin);
+	eeprom_read(8192, 0, bufout);
 	printf("\n");
+//to save the intermediate output
+	//open_file("user3.txt");
+
+	//close_file();
 	release_mutex();
-	//pthread_mutex_unlock(&mutex);
 	free(bufin);
 	bufin=NULL;
 	free(bufout);
