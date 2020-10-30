@@ -7,10 +7,8 @@ FILE *fptr;
 
 void open_file(void){
 	fptr = fopen("./original.txt", "r+");
-
 	if(fptr==NULL){
 		puts("error while opening the file");
-		//exit(1);
 	}
 }
 
@@ -38,7 +36,7 @@ void eeprom_read(long int offset, int size, char* buf){
 	int page_no=0;
 	int word_no=0;
 	int index=0; //this is bufout index which can go from 0-8191
-	if(offset>8192|| size>8192){
+	if(offset>8192 || size>8192){
 		printf("eeprom_read error:offset or size input is invalid\n");
 	}
 	else{
@@ -56,6 +54,7 @@ void eeprom_read(long int offset, int size, char* buf){
 					index++;
 					word_no++;
 				}
+				//after page 0
 				page_no++;
 				offset=page_no*32;
 				free(page);
@@ -71,7 +70,7 @@ void eeprom_write(long int offset, int size, char* buf){
 	int page_no; 
 	int word_no; 
 	
-	int overwrite_word_no;
+	int overwrite_word_no;//for safe over writing
 	int no_of_word=0;
 	if(offset>8192 || size>8192){
 		printf("eeprom_write error: offset or size input is invalid\n");
@@ -80,7 +79,8 @@ void eeprom_write(long int offset, int size, char* buf){
 		while(size!=0){ 
 			page_no=offset/32; 
 			word_no=offset%32; 
-			overwrite_word_no=offset%32; 
+			overwrite_word_no=offset%32; //the starting word_no onactual page
+//to understand a particular page what must be overwritten and not
 			no_of_word=0;
 			char* page=(char *) calloc(32,sizeof(char)); //created a malloc page
 			//fill page values
