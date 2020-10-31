@@ -126,7 +126,7 @@ void *user3(void *param){
 	get_mutex();
 	printf("user 3 is accessing the file EEPROM\n");
 	printf("writing and reading page 12\n");
-	write_page(bufin, 12, 0, 32);
+	write_page(bufin, 12, 0, 32);//**********************
 	read_page(bufout, 12);
 	for(i=0; i<32; i++){
 		printf("%c\n", bufout[i]);

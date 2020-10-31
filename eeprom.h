@@ -10,9 +10,10 @@
  *****************************************************************************/
 /**
  * @file eeprom.h
- * @brief Abstraction of memory read and write operations
- *
- * This header file provides the eeprom read and write API's
+ * 
+ * @brief This header file provides the eeprom read and 
+ * write API's at page and byte level and other necessary functions
+ * like erase, mutex, opening and closing file.
  *
  * @author Shweta Mane
  * @date Oct 28 2020
@@ -32,9 +33,11 @@ FILE *fptr;
  *
  * @param offset location of the starting byte (in the file)
  * @param size No of bytes
- * @param buf pointer to the heap memory where the bytes accessed will be returned.
+ * @param buf pointer to the heap memory where the bytes accessed 
+ * from the file will be returned.
  *
  * @return void
+ * @notes data received from the file is loaded into heap
  */
 void eeprom_read(u_int16_t offset, u_int16_t size, char* buf);
 
@@ -42,14 +45,17 @@ void eeprom_read(u_int16_t offset, u_int16_t size, char* buf);
  * @brief Writes the no of bytes/words starting from the offset 
  *
  * Given a offset, sets the file pointer to desired offset, 
- * and then copies the bytes in the file pointed by buf. 
+ * and then copies the bytes into the file pointed by buf. 
  * Here no of bytes are mentioned by size parameter.
  *
- * @param offset location of the starting byte (in the file) where new data should be written
+ * @param offset location of the starting byte (in the file) 
+ * where new data should be written
  * @param size No of bytes
- * @param buf Pointer to the heap memory where the bytes will be accessed to store in the file
+ * @param buf Pointer to the heap memory where the bytes will be 
+ * accessed to store in the file.
  *
  * @return void.
+ * @notes data received from the heap is loaded into the file
  */
 void eeprom_write(u_int16_t offset, u_int16_t size, char* buf);
 
@@ -57,10 +63,11 @@ void eeprom_write(u_int16_t offset, u_int16_t size, char* buf);
  * @brief Reads a page from the file
  *
  * Given a page number, sets the file pointer to the page starting address, 
- * and then copies the bytes in the file to the location pointed by page. 
+ * and then copies the bytes in the file to the location pointed by page buffer. 
  * 
  *
- * @param page Pointer to the location where the 32 bytes/ single page will be copied
+ * @param page Pointer to the location where the 32 bytes/ 
+ * single page will be copied
  * @param page_no Page number
  * 
  *
@@ -71,7 +78,8 @@ void read_page(char *page, u_int16_t page_no);
 /**
  * @brief Writes a page in the file
  *
- * Given a page number, word number, and no of words on that page to be overwritten safely,
+ * Given a heap location with some data, page number, starting word number, 
+ * and no of words on that page to be overwritten safely,
  * it will write to a particular page in the file
  * 
  *
@@ -87,7 +95,7 @@ void write_page(char *page, u_int16_t page_no, u_int8_t word_no, u_int8_t no_of_
 /**
  * @brief Opens the file 
  *
- * Opens a file, in order create a new text file change the path in this function definition
+ * Opens a file with the path passed in an array to this function
  * 
  *
  * @param path path of a file that needs to be opened
@@ -114,7 +122,7 @@ void close_file(void);
  * @brief Erase the file
  *
  * Erases all the location of file
- * 
+ * and put blanks
  *
  * @param void
  * 
@@ -126,7 +134,8 @@ void erase(void);
 /**
  * @brief Allows a user to get mutex 
  *
- * Enables a user to get mutex in order to perform read write operation or wait for a mutex until it becomes available
+ * Enables a user to get mutex in order to perform read write operation along with operations like
+ * opening and closing a file or wait for a mutex until it becomes available
  * 
  *
  * @param void
@@ -139,7 +148,8 @@ void get_mutex(void);
 /**
  * @brief Allows a user to release mutex
  *
- * Enables a user to release mutex after use so that other user can get the mutex
+ * Enables a user to release mutex after use so 
+ * that other user can get the mutex
  * 
  *
  * @param void

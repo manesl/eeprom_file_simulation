@@ -11,7 +11,7 @@ char path[]="./original.txt";
 void open_file(char path[]){
 	fptr = fopen(path, "r+");
 	if(fptr==NULL){
-		puts("error while opening the file");
+		puts("error while opening the file, make sure the file exists\n");
 	}
 }
 
@@ -20,7 +20,7 @@ void close_file(void){
 }
 
 void get_mutex(void){
-	while(mutex); //if 1 wait until it becomes available
+	while(mutex); //if 1 then wait until it becomes available
 	mutex=1;
 }
 void release_mutex(void){
@@ -31,6 +31,7 @@ void read_page(char* page, u_int16_t page_no){
 	u_int8_t i=0;
 	if(page_no>255){
 		printf("read_page error:page_no input is invalid allowed page no are 0-255\n");
+		printf("\n");
 	}
 	else{
 		open_file(path);
@@ -49,6 +50,7 @@ void eeprom_read(u_int16_t offset, u_int16_t size, char* buf){
 	u_int16_t index=0; //this is bufout index which can go from 0-8191
 	if(offset>=8192 || size>8192 || size==0){
 		printf("eeprom_read error:offset or size input is invalid, allowed offset is 0-8191 and size of the bytes one can read is 1-8192\n");
+		printf("\n");
 	}
 	else{
 		while(size!=0){
@@ -85,6 +87,7 @@ void eeprom_write(u_int16_t offset, u_int16_t size, char* buf){
 	u_int8_t no_of_word=0;
 	if(offset>=8192 || size>8192 || size==0){
 		printf("eeprom_write error: offset or size input is invalid, allowed offset is 0-8191 and allowed size is 1-8192\n");
+		printf("\n");
 	}
 	else{
 		while(size!=0){ 
@@ -114,7 +117,8 @@ void eeprom_write(u_int16_t offset, u_int16_t size, char* buf){
 
 void write_page(char *page, u_int16_t page_no, u_int8_t word_no, u_int8_t no_of_word){
 	if(page_no>255 || word_no>32 || no_of_word>32){
-		printf("write_page error: page_no or word_no or no_of_word input is invalid, allowed page no are 0-255\n");
+		printf("write_page error: page_no or word_no or no_of_word input is invalid, allowed page no are 0-255, word_no can be 0-31 and no of words 1-32\n");
+		printf("\n");
 	}
 	else{
 		open_file(path);

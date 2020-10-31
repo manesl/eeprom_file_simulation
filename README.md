@@ -20,7 +20,8 @@ user 1 tries to perform erase operation and fills the EEPROM 0-8191 offset
 user 2 tries to perform a overwrite operation and fills the EEPROM 0-8191 offset 
 with a-z alphabets
 
-user 3 tries to give bad inputs and the error statements are printed on the console
+user 3 writes a single page 12 and reads it and 
+tries to give bad inputs and the error statements are printed on the console
 
 In main.c the lines marked with /************ must be edited to see changes
 
@@ -34,9 +35,24 @@ eeprom.h : conatins function prototypes
 
 original.txt: the main txt file which is read and written.
 
-user1.txt, user2.txt: to save intermediate output
+user1.txt, user2.txt: to save intermediate output of the users
+since last user will overwrite the original.txt
 
-Assumptions:
-1) if two threads will try to call the main function at once the behavior will be undefined,
+
+Assumptions and Information:
+1) If two threads will try to call the main function for pthread_join() at once the behavior will be undefined,
 the code needs to be ran again.
  
+2) Different encoding might affect the output data. So it must be set to UTF-8. 
+
+3) At a time only one user can open, read/write, close file. 
+Other users can keep write buffers ready or read their saved buffers, thus making
+the program time efficient.
+
+4) Erase state will blank out the file instead of storing 0xFF
+
+5) Bad inputs considered are out of bound access for offset, page no.s, words on a page etc.
+Care has been taken to inform the user about the range of values they can enter.
+
+6) While writing a page, the data is only overwritten and it does not wipe out the whole file or corrupts other data.
+
