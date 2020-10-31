@@ -4,8 +4,8 @@
 #include <pthread.h>
 
 //function prototypes or declarations for users
-void *user1(void *param); //erase operation and writes A
-void *user2(void *param); //overwrite B
+void *user1(void *param); //erase operation and writes A-Z
+void *user2(void *param); //overwrite a-z
 void *user3(void *param); //bad inputs
 
 int main(){ 
@@ -31,11 +31,11 @@ int main(){
 
 void *user1(void *param){
 //variables
-	int i=0;
+	u_int16_t i=0;
 	char *bufout = (char *) calloc(8192, sizeof(char));
 	char *bufin = (char *) calloc(8192, sizeof(char));
 //writing to the in buffer for writing to the file
-	int j=65;
+	u_int8_t j=65;
 	for(i=0;i<8192;i++){
 		if(j==91){
 			j=65;
@@ -45,6 +45,7 @@ void *user1(void *param){
 	}
 //waiting or picking the mutex to perform read write
 	get_mutex();
+
 	printf("user 1 is accessing the file EEPROM\n");
 	printf("user 1 performs erase operation on the EEPROM\n");
 	
@@ -71,7 +72,9 @@ void *user1(void *param){
 	}
 	close_file();
 	printf("\n");
+//releasing mutex so that others can use the mutex
 	release_mutex();
+
 	free(bufin);
 	bufin=NULL;
 	free(bufout);
@@ -80,10 +83,10 @@ void *user1(void *param){
 
 void *user2(void *param){
 
-	int i=0;
+	u_int16_t i=0;
 	char *bufout = (char *) calloc(8192, sizeof(char));
 	char *bufin = (char *) calloc(8192, sizeof(char));
-	int j=97;
+	u_int8_t j=97;
 	for(i=0;i<8192;i++){
 		if(j==123){
 			j=97;
@@ -114,7 +117,7 @@ void *user2(void *param){
 }
 
 void *user3(void *param){
-	int i=0;
+	u_int16_t i=0;
 	char *bufout = (char *) calloc(8192, sizeof(char));
 	char *bufin = (char *) calloc(8192, sizeof(char));
 	for(i=0;i<8192;i++){
@@ -128,10 +131,6 @@ void *user3(void *param){
 	eeprom_write(8192, 0, bufin);
 	eeprom_read(8192, 0, bufout);
 	printf("\n");
-//to save the intermediate output
-	//open_file("user3.txt");
-
-	//close_file();
 	release_mutex();
 	free(bufin);
 	bufin=NULL;

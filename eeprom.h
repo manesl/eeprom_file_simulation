@@ -21,7 +21,8 @@
 #ifndef __EEPROM_H__
 #define __EEPROM_H__
 
-#include <stdio.h>
+//#include <stdio.h>
+//#include <stdint.h>
 //global variable
 FILE *fptr;
 /**
@@ -37,7 +38,7 @@ FILE *fptr;
  *
  * @return void
  */
-void eeprom_read(long int offset, int size, char* buf);
+void eeprom_read(u_int16_t offset, u_int16_t size, char* buf);
 
 /**
  * @brief Writes the no of bytes/words starting from the offset 
@@ -52,7 +53,7 @@ void eeprom_read(long int offset, int size, char* buf);
  *
  * @return void.
  */
-void eeprom_write(long int offset, int size, char* buf);
+void eeprom_write(u_int16_t offset, u_int16_t size, char* buf);
 
 /**
  * @brief Reads a page from the file
@@ -67,7 +68,7 @@ void eeprom_write(long int offset, int size, char* buf);
  *
  * @return void.
  */
-void read_page(char *page, int page_no);
+void read_page(char *page, u_int16_t page_no);
 
 /**
  * @brief Writes a page in the file
@@ -83,7 +84,7 @@ void read_page(char *page, int page_no);
  *
  * @return void.
  */
-void write_page(char *page, int page_no, int word_no, int no_of_word);
+void write_page(char *page, u_int16_t page_no, u_int8_t word_no, u_int8_t no_of_word);
 
 /**
  * @brief Opens the file 
@@ -91,7 +92,7 @@ void write_page(char *page, int page_no, int word_no, int no_of_word);
  * Opens a file, in order create a new text file change the path in this function definition
  * 
  *
- * @param void
+ * @param path path of a file that needs to be opened
  * 
  *
  * @return void.
