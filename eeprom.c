@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "./eeprom.h"
-//#include <stdint.h>
 
 //global variables
-//FILE *fptr;
+
 #define ERASE 0xFF
 u_int8_t mutex=0;
 char path[]="./original.txt";
@@ -103,7 +102,7 @@ void eeprom_write(u_int16_t offset, u_int16_t size, char* buf){
 				i++;
 				no_of_word++;
 			}
-			printf("page no:%d\n", page_no);
+			
 			write_page(page, page_no, overwrite_word_no, no_of_word); 
 			offset=offset+no_of_word;
 			free(page);

@@ -120,11 +120,18 @@ void *user3(void *param){
 	u_int16_t i=0;
 	char *bufout = (char *) calloc(8192, sizeof(char));
 	char *bufin = (char *) calloc(8192, sizeof(char));
-	for(i=0;i<8192;i++){
+	for(i=0;i<832;i++){
 		bufin[i]=66;
 	}
 	get_mutex();
 	printf("user 3 is accessing the file EEPROM\n");
+	printf("writing and reading page 12\n");
+	write_page(bufin, 12, 0, 32);
+	read_page(bufout, 12);
+	for(i=0; i<32; i++){
+		printf("%c\n", bufout[i]);
+	}
+	printf("user 3: testing bad inputs\n");
 //to test bad inputs
 	write_page(bufin, 256, 32, 33);
 	read_page(bufout, 256);

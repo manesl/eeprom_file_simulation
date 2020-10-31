@@ -21,8 +21,6 @@
 #ifndef __EEPROM_H__
 #define __EEPROM_H__
 
-//#include <stdio.h>
-//#include <stdint.h>
 //global variable
 FILE *fptr;
 /**
