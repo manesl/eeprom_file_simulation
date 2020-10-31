@@ -35,8 +35,13 @@ void *user1(void *param){
 	char *bufout = (char *) calloc(8192, sizeof(char));
 	char *bufin = (char *) calloc(8192, sizeof(char));
 //writing to the in buffer for writing to the file
+	int j=65;
 	for(i=0;i<8192;i++){
-		bufin[i]=65;
+		if(j==91){
+			j=65;
+		}
+		bufin[i]=j;
+		j++;
 	}
 //waiting or picking the mutex to perform read write
 	get_mutex();
@@ -51,7 +56,7 @@ void *user1(void *param){
 	}
 	printf("\n");
 //eeprom write based on offset 0 and size [0-8192] words/bytes
-	eeprom_write(0, 8192, bufin);
+	eeprom_write(0, 8192, bufin);//***************************************
 //read all bytes from out buffer 
 	eeprom_read(0, 8192, bufout); 
 //printing the output if user 1 written operation	
@@ -78,12 +83,17 @@ void *user2(void *param){
 	int i=0;
 	char *bufout = (char *) calloc(8192, sizeof(char));
 	char *bufin = (char *) calloc(8192, sizeof(char));
+	int j=97;
 	for(i=0;i<8192;i++){
-		bufin[i]=66;
+		if(j==123){
+			j=97;
+		}
+		bufin[i]=j;
+		j++;
 	}
 	get_mutex();
 	printf("user 2 is accessing the file EEPROM\n");	
-	eeprom_write(0, 8192, bufin);	
+	eeprom_write(0, 8192, bufin);	//******************************************
 	eeprom_read(0, 8192, bufout);
 	printf("output of user 2 for write operation\n"); 
 	for(i=0;i<8192;i++){

@@ -139,7 +139,7 @@ void erase(void){
 //temporary write sample	
 	int i=0;
 	for(i=0;i<8192;i++){
-		bufin[i]=32;
+		bufin[i]=32;//blank space
 	}
 	if(status==ERASE){
 		eeprom_write(0, 8192, bufin);	
