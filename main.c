@@ -25,7 +25,7 @@ int main(){
 	pthread_join(tid2, NULL);
 	pthread_join(tid3, NULL);
 //thread clean up function
-	pthread_exit(0);
+	//pthread_exit(0);
 	return 0;
 }
 
@@ -78,7 +78,8 @@ void *user1(void *param){
 	free(bufin);
 	bufin=NULL;
 	free(bufout);
-	bufout=NULL;		
+	bufout=NULL;	
+	pthread_exit(0);	
 }
 
 void *user2(void *param){
@@ -114,6 +115,7 @@ void *user2(void *param){
 	bufin=NULL;
 	free(bufout);
 	bufout=NULL;
+	pthread_exit(0);
 }
 
 void *user3(void *param){
@@ -143,4 +145,5 @@ void *user3(void *param){
 	bufin=NULL;
 	free(bufout);
 	bufout=NULL;
+	pthread_exit(0);
 }
