@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "eeprom.h"
 #include <pthread.h>
+#include <stdint.h>
 
 //function prototypes or declarations for users
 void *user1(void *param); //erase operation and writes A-Z
@@ -31,11 +32,11 @@ int main(){
 
 void *user1(void *param){
 //variables
-	u_int16_t i=0;
+	uint16_t i=0;
 	char *bufout = (char *) calloc(8192, sizeof(char));
 	char *bufin = (char *) calloc(8192, sizeof(char));
 //writing to the in buffer for writing to the file
-	u_int8_t j=65;
+	uint8_t j=65;
 	for(i=0;i<8192;i++){
 		if(j==91){
 			j=65;
@@ -84,10 +85,10 @@ void *user1(void *param){
 
 void *user2(void *param){
 
-	u_int16_t i=0;
+	uint16_t i=0;
 	char *bufout = (char *) calloc(8192, sizeof(char));
 	char *bufin = (char *) calloc(8192, sizeof(char));
-	u_int8_t j=97;
+	uint8_t j=97;
 	for(i=0;i<8192;i++){
 		if(j==123){
 			j=97;
@@ -119,7 +120,7 @@ void *user2(void *param){
 }
 
 void *user3(void *param){
-	u_int16_t i=0;
+	uint16_t i=0;
 	char *bufout = (char *) calloc(8192, sizeof(char));
 	char *bufin = (char *) calloc(8192, sizeof(char));
 	for(i=0;i<832;i++){

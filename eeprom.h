@@ -21,7 +21,7 @@
  */
 #ifndef __EEPROM_H__
 #define __EEPROM_H__
-
+#include <stdint.h>
 //global variable
 FILE *fptr;
 /**
@@ -39,7 +39,7 @@ FILE *fptr;
  * @return void
  * @notes data received from the file is loaded into heap
  */
-void eeprom_read(u_int16_t offset, u_int16_t size, char* buf);
+void eeprom_read(uint16_t offset, uint16_t size, char* buf);
 
 /**
  * @brief Writes the no of bytes/words starting from the offset 
@@ -57,7 +57,7 @@ void eeprom_read(u_int16_t offset, u_int16_t size, char* buf);
  * @return void.
  * @notes data received from the heap is loaded into the file
  */
-void eeprom_write(u_int16_t offset, u_int16_t size, char* buf);
+void eeprom_write(uint16_t offset, uint16_t size, char* buf);
 
 /**
  * @brief Reads a page from the file
@@ -73,7 +73,7 @@ void eeprom_write(u_int16_t offset, u_int16_t size, char* buf);
  *
  * @return void.
  */
-void read_page(char *page, u_int16_t page_no);
+void read_page(char *page, uint16_t page_no);
 
 /**
  * @brief Writes a page in the file
@@ -90,7 +90,7 @@ void read_page(char *page, u_int16_t page_no);
  *
  * @return void.
  */
-void write_page(char *page, u_int16_t page_no, u_int8_t word_no, u_int8_t no_of_word);
+void write_page(char *page, uint16_t page_no, uint8_t word_no, uint8_t no_of_word);
 
 /**
  * @brief Opens the file 
