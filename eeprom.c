@@ -5,7 +5,7 @@
 //global variables
 
 #define ERASE 0xFF
-uint8_t mutex=0;
+//uint8_t mutex=0;
 char path[]="./original.txt";
 
 void open_file(char path[]){
@@ -19,13 +19,13 @@ void close_file(void){
 	fclose(fptr);
 }
 
-void get_mutex(void){
+/*void get_mutex(void){
 	while(mutex); //if 1 then wait until it becomes available
 	mutex=1;
 }
 void release_mutex(void){
 	mutex=0;
-}
+}*/
 
 void read_page(char* page, uint16_t page_no){
 	uint8_t i=0;

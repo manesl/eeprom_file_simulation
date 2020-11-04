@@ -143,7 +143,7 @@ void erase(void);
  *
  * @return void.
  */
-void get_mutex(void);
+//void get_mutex(void);
 
 /**
  * @brief Allows a user to release mutex
@@ -157,6 +157,6 @@ void get_mutex(void);
  *
  * @return void.
  */
-void release_mutex(void);
+//void release_mutex(void);
 
 #endif /* __MEMORY_H__ */
